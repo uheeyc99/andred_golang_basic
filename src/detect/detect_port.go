@@ -1,4 +1,4 @@
-package main
+package detect
 
 import (
 	"net"
@@ -87,7 +87,7 @@ func detect(ip_start string,ip_end string,port_start string,port_end string){
 
 var conn_timeout time.Duration
 
-func main(){
+func Detect(){
 	fmt.Println(time.Now())
 	conn_timeout = 1000  //1s
 	detect("10.10.1.1","10.10.1.254","1","65535")
