@@ -8,8 +8,6 @@ import (
 	"time"
 	"bytes"
 	"strings"
-
-	"os"
 )
 func StringIpToInt(ipstring string) int {
 	ipSegs := strings.Split(ipstring, ".")
