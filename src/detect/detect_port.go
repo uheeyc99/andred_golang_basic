@@ -96,7 +96,7 @@ func init(){
 	p_end="65535"
 }
 
-func Detect(){
+func Detect_Port(){
 
 	file,err:=os.Open("in.conf")
 	if(err!=nil) {

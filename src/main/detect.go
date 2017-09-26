@@ -1,12 +1,13 @@
 package main
 
 import (
-	"fmt"
+	"broadcast"
 	"time"
-	"detect"
 )
 
 func main() {
-	fmt.Println(time.Now())
-	detect.Detect()
+	go broadcast.Response_Andrew()
+
+	broadcast.Ask()
+	time.Sleep(1000000000000)
 }
