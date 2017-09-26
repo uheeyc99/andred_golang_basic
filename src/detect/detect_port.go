@@ -8,6 +8,8 @@ import (
 	"time"
 	"bytes"
 	"strings"
+	"os"
+	"bufio"
 )
 func StringIpToInt(ipstring string) int {
 	ipSegs := strings.Split(ipstring, ".")
@@ -69,7 +71,7 @@ func detect_one(ip string,port string,ch_x chan int)(err1 error){
 }
 
 func detect(ip_start string,ip_end string,port_start string,port_end string){
-
+	fmt.Println("detect: ",ip_start,ip_end,p_start,p_end)
 	ch1:=make(chan  int,500)
 
 	port_start_int,_:=strconv.Atoi(port_start)
@@ -86,14 +88,36 @@ func detect(ip_start string,ip_end string,port_start string,port_end string){
 }
 
 var conn_timeout time.Duration
+var h_start,h_end,p_start,p_end string
+func init(){
+	h_start="10.10.1.1"
+	h_end ="10.10.5.254"
+	p_start="1"
+	p_end="65535"
+}
 
 func Detect(){
-	fmt.Println(time.Now())
-	conn_timeout = 1000  //1s
-	detect("10.10.1.1","10.10.1.254","1","65535")
-	//detect(os.Args[1],os.Args[2],os.Args[3],os.Args[4])
-	wait.Wait()
 
-	fmt.Println(time.Now())
+	file,err:=os.Open("in.conf")
+	if(err!=nil) {
+		fmt.Println("where is in.conf")
+	}else{
+		defer file.Close()
+
+		br:=bufio.NewReader(file)
+		var str []byte
+		str,_,_ = br.ReadLine()
+		h_start =string(str)
+		str,_,_ = br.ReadLine()
+		h_end =string(str)
+		str,_,_ = br.ReadLine()
+		p_start =string(str)
+		str,_,_ = br.ReadLine()
+		p_end =string(str)
+	}
+
+	conn_timeout = 10000  //10s
+	detect(h_start,h_end,p_start,p_end)
+	wait.Wait()
 
 }
