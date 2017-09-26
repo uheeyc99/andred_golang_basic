@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"strings"
 
+	"os"
 )
 func StringIpToInt(ipstring string) int {
 	ipSegs := strings.Split(ipstring, ".")
@@ -91,8 +92,8 @@ var conn_timeout time.Duration
 func main(){
 
 	conn_timeout = 10000
-	detect("10.10.1.1","10.10.1.254","1","600")
-	//detect(os.Args[1],os.Args[2],os.Args[3],os.Args[4])
+	//detect("10.10.1.1","10.10.1.254","1","600")
+	detect(os.Args[1],os.Args[2],os.Args[3],os.Args[4])
 	wait.Wait()
 
 	//fmt.Println(time.Now())
