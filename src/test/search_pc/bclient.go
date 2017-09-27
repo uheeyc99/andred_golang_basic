@@ -70,16 +70,17 @@ func Ask(){
 	}
 	defer conn2.Close()
 	var buf [1024]byte
-
-	for i:=0;i<10;i++{
-		conn2.SetReadDeadline(time.Now().Add( time.Second))
+	t1:=time.Now()
+	for i:=0;i<5;i++{
+		conn2.SetReadDeadline(time.Now().Add( time.Millisecond*1000))
 		//time.Now().Add(time.Duration(10) * time.Second)
 		n,raddr,err:=conn2.ReadFromUDP(buf[0:])
 		if(err !=nil){
-			fmt.Println(err)
+			//fmt.Println(err)
 			continue
+			//break
 		}
-		fmt.Println("received response:" + string(buf[0:n])+" from "+ raddr.IP.String(),strconv.Itoa(raddr.Port))
+		fmt.Println(time.Now().Sub(t1).String()+":" + string(buf[0:n])+" from "+ raddr.IP.String(),strconv.Itoa(raddr.Port))
 	}
 
 
@@ -89,7 +90,7 @@ func Ask(){
 
 func main()  {
 
-		for i:=0;i<20;i++{
+		for i:=0;i<100;i++{
 
 			Ask()
 		}

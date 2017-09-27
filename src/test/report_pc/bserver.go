@@ -75,7 +75,7 @@ func send_udp(ip string,port string,str string){
 		fmt.Println("aa")
 		return
 	}
-	time.Sleep(time.Second*5)
+	//time.Sleep(time.Second*5)
 }
 
 
