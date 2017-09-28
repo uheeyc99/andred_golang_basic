@@ -17,7 +17,7 @@ func AndrewwalkFunc(path string,info os.FileInfo,err error)error{
 
 func main(){
 
-	filepath.Walk("/Users/eric/workspaces",AndrewwalkFunc)
+	filepath.Walk(".",AndrewwalkFunc)
 	fmt.Println(size,size/1024/1024)
 
 }
