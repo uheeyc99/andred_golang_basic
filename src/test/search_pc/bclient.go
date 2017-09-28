@@ -3,11 +3,8 @@ package main
 import (
 	"net"
 	"fmt"
-
 	"strconv"
-
 	"os"
-
 	"time"
 )
 
@@ -72,13 +69,13 @@ func Ask(){
 	var buf [1024]byte
 	t1:=time.Now()
 	for i:=0;i<5;i++{
-		conn2.SetReadDeadline(time.Now().Add( time.Millisecond*1000))
+		conn2.SetReadDeadline(time.Now().Add( time.Second))
 		//time.Now().Add(time.Duration(10) * time.Second)
 		n,raddr,err:=conn2.ReadFromUDP(buf[0:])
 		if(err !=nil){
 			//fmt.Println(err)
-			continue
-			//break
+			//continue
+			break
 		}
 		fmt.Println(time.Now().Sub(t1).String()+":" + string(buf[0:n])+" from "+ raddr.IP.String(),strconv.Itoa(raddr.Port))
 	}
@@ -90,7 +87,7 @@ func Ask(){
 
 func main()  {
 
-		for i:=0;i<100;i++{
+		for i:=0;i<1;i++{
 
 			Ask()
 		}
