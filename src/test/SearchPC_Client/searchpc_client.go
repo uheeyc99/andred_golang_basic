@@ -35,5 +35,5 @@ func try_pc(ip_str string){
 }
 
 func main()  {
-	try_pc("127.0.0.1")
+	try_pc("10.10.1.224")
 }
