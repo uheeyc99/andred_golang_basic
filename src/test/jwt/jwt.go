@@ -65,18 +65,19 @@ func loginHandler(w http.ResponseWriter, r *http.Request){
 	if r.Method == "POST"{
 
 		r.ParseForm()
-		reason:=checkUserByName(r.Form["username"][0],r.Form["password"][0])
+		w.Header().Set("Content-Type", "application/json")
+		username:=r.Form.Get("username")
+		passwd:=r.Form.Get("password")
+		fmt.Println(username,passwd)
+		reason:=checkUserByName(username,passwd)
 		if reason==""{
-			tokenString,_:=AndrewMakeToken(r.Form["username"][0])
+			tokenString,_:=AndrewMakeToken(username)
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(tokenString))
 			return
 		}
-		w.Header().Set("Content-Type", "application/json")
+
 		w.WriteHeader(http.StatusUnauthorized)
-
-
-
 		w.Write([]byte(reason))
 		return
 	}
@@ -85,7 +86,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request){
 
 func checkUserByName(user string,passwd string)(string){
 	if(user != "eric"){
-		return "No Found User"
+		return "Not Found User"
 	}
 	if(passwd !="12345678"){
 		return "passwd error"

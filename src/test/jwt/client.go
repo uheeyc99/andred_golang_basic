@@ -29,7 +29,7 @@ func andrew_get(){
 func andrew_portform(){
 
 	resp,err:=http.PostForm("http://127.0.0.1:9090/login",
-		url.Values{"username":{"eric"},"password":{"12345678"}})
+		url.Values{"username1":{"eric"},"password1":{"12345678"}})
 	if err!=nil{
 		fmt.Println("error:",err)
 		return
@@ -40,7 +40,8 @@ func andrew_portform(){
 	var p [228]byte
 	n,err:=resp.Body.Read(p[0:])
 	auth_token = string(p[0:n])
-	fmt.Println("auth_token:",auth_token)
+
+	fmt.Println("auth_token:",auth_token,n)
 }
 func andrew_post(){
 	resp,err:=http.Post("http://127.0.0.1:9090/login",
