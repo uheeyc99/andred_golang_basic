@@ -7,13 +7,15 @@ import (
 	"net/http"
 	"html/template"
 	"encoding/json"
+	"strings"
+	"io/ioutil"
 )
 
 var mySignKey= "Andrew"
 
-
-type AndrewToken struct {
-	AndrewToken string `json:"TokenAndrew"`
+type andrew_login_info struct {
+	Username string
+	Password string
 }
 
 func AndrewMakeToken(audience string)(string,error){
@@ -51,6 +53,7 @@ func AndrewParseToken(token string)(string,error){
 	return c["jti"].(string),nil
 }
 
+
 func loginHandler(w http.ResponseWriter, r *http.Request){
 
 	fmt.Println("login_check method",r.Method)
@@ -65,16 +68,36 @@ func loginHandler(w http.ResponseWriter, r *http.Request){
 	if r.Method == "POST"{
 
 		r.ParseForm()
-		w.Header().Set("Content-Type", "application/json")
-		username:=r.Form.Get("username")
-		passwd:=r.Form.Get("password")
-		fmt.Println(username,passwd)
-		reason:=checkUserByName(username,passwd)
-		if reason==""{
-			tokenString,_:=AndrewMakeToken(username)
-			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(tokenString))
-			return
+		var reason string = "Unknow Error"
+
+		if 0 == strings.Compare("application/x-www-form-urlencoded",r.Header.Get("Content-Type")){
+
+			username:=r.Form.Get("username")
+			passwd:=r.Form.Get("password")
+			fmt.Println(username,passwd)
+			reason=checkUserByName(username,passwd)
+			if reason==""{
+				tokenString,_:=AndrewMakeToken(username)
+				w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(tokenString))
+
+				return
+			}
+
+		} else {  //json
+			var info andrew_login_info
+			body,_:=ioutil.ReadAll(r.Body)
+			json.Unmarshal(body,&info)
+			fmt.Println(info.Username,info.Password)
+			reason=checkUserByName(info.Username,info.Password)
+			if reason==""{
+				tokenString,_:=AndrewMakeToken(info.Username)
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusOK)
+				jsonResponse(andrew_token{tokenString},w)
+				return
+			}
 		}
 
 		w.WriteHeader(http.StatusUnauthorized)
@@ -94,6 +117,22 @@ func checkUserByName(user string,passwd string)(string){
 	return ""
 }
 
+
+
+
+func jsonResponse(response interface{}, w http.ResponseWriter) {
+
+	json, err := json.Marshal(response)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	//w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Println("Json:::",string(json))
+	w.Write(json)
+}
+
 func resourceHandler(w http.ResponseWriter, r *http.Request){
 	fmt.Println("resource method",r.Method)
 	fmt.Println("Header",r.Header)
@@ -104,20 +143,6 @@ func resourceHandler(w http.ResponseWriter, r *http.Request){
 	}
 	w.Write([]byte("hello " + s))
 
-}
-
-func AndrewJsonResponse(response interface{}, w http.ResponseWriter) {
-
-	json, err := json.Marshal(response)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "application/json")
-	fmt.Println(string(json))
-	w.Write(json)
 }
 
 func start_server(){

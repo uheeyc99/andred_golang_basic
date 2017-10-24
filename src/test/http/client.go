@@ -26,25 +26,9 @@ func andrew_get(){
 	fmt.Println(string(p[0:n]))
 }
 
+
+
 func andrew_portform(){
-
-	resp,err:=http.PostForm("http://127.0.0.1:9090/login",
-		url.Values{"username":{"eric"},"password":{"12345678"}})
-	if err!=nil{
-		fmt.Println("error:",err)
-		return
-	}
-	defer resp.Body.Close()
-	fmt.Println("Status:",resp.StatusCode)
-	fmt.Println("Header:",resp.Header)
-	var p [228]byte
-	n,err:=resp.Body.Read(p[0:])
-	auth_token = string(p[0:n])
-
-	fmt.Println("auth_token:",auth_token,n)
-}
-
-func andrew_portform1(){
 
 	resp,err:=http.PostForm("http://127.0.0.1:9090/login",
 		url.Values{"username":{"eric"},"password":{"12345678"}})

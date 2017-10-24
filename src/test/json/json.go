@@ -32,7 +32,7 @@ func enc1(){
 	if err!=nil{
 		fmt.Println(err)
 	}
-
+	fmt.Println("llll:",jp)
 	//write
 	f,err:=os.Create("bin/jsontext1-1.txt")
 	if err!=nil{
