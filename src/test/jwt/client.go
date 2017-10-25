@@ -26,7 +26,7 @@ type login_info struct {
 
 
 func andrew_get(){
-	resp,err:=http.Get("http://127.0.0.1:9090/login")
+	resp,err:=http.Get("http://qycam.com:50219/info2.php")
 	if err!=nil{
 		fmt.Println("error:",err)
 		return
@@ -225,6 +225,7 @@ func getToken1(){
 
 
 func main(){
+	andrew_get()
 	getToken1()
 	fmt.Println("auth_Token:",auth_token)
 	getToken2()

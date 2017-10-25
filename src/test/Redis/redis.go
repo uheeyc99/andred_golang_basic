@@ -9,14 +9,14 @@ import (
 func run_redis(){
 
 
-	c,e:=redis.Dial("tcp","qycam.com:50218")
+	c,e:=redis.Dial("tcp","qycam.com:50202")
 	if e!=nil{
 		fmt.Println(e)
 		return
 	}
 	defer c.Close()
 
-	_,err0:=c.Do("AUTH","andrew")
+	_,err0:=c.Do("AUTH","123456789")
 	if err0!=nil {
 		fmt.Println(err0)
 	}
