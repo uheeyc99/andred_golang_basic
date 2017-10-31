@@ -8,12 +8,13 @@ import (
 	"compress/gzip"
 	"io"
 	"io/ioutil"
+	"encoding/json"
 )
 
 var auth_token string = "my token"
 
-func andrew_get(){
-	resp,err:=http.Get("http://127.0.0.1:9090/login")
+func andrew_get(url string){
+	resp,err:=http.Get("http://127.0.0.1/andrew/hello")
 	if err!=nil{
 		fmt.Println("error:",err)
 		return
@@ -28,10 +29,10 @@ func andrew_get(){
 
 
 
-func andrew_portform(){
+func andrew_portform(addr string){
 
-	resp,err:=http.PostForm("http://127.0.0.1:9090/login",
-		url.Values{"username":{"eric"},"password":{"12345678"}})
+	resp,err:=http.PostForm(addr,
+		url.Values{"username":{"eric123"},"password":{"12345678"}})
 	if err!=nil{
 		fmt.Println("error:",err)
 		return
@@ -44,11 +45,24 @@ func andrew_portform(){
 	auth_token = string(p[0:n])
 
 	fmt.Println("auth_token:",auth_token,n)
+
+	type Sta struct {
+		Status string `json:"status_code"`
+		Status_code string `json:"status"`
+	}
+	type pp struct{
+		Username string `json:"username"`
+		Pass string `json:"passwd"`
+		AA Sta
+	}
+	var a pp
+	json.Unmarshal(p[0:n],&a)
+	fmt.Println(a.Username,a.Pass)
 }
 
 
-func andrew_post(){
-	resp,err:=http.Post("http://127.0.0.1:9090/login",
+func andrew_post(url string){
+	resp,err:=http.Post(url,
 		"application/x-www-form-urlencoded",
 		strings.NewReader("username=eric"))
 
@@ -62,13 +76,18 @@ func andrew_post(){
 	var p [10240]byte
 	n,err:=resp.Body.Read(p[0:])
 	fmt.Println(string(p[0:n]))
+
+
+
+
+
 }
 
 
-func test_get(){
+func test_get(url string){
 
 	client:= &http.Client{}
-	request,err:=http.NewRequest("GET","http://127.0.0.1:9090/resource",nil)
+	request,err:=http.NewRequest("GET",url,nil)
 	//request.Header.Add("Authorization","Bearer "+ auth_token)
 	request.Header.Add("Authorization",auth_token)
 	request.Header.Add("Content-Type","application/x-www-form-urlencoded")
@@ -120,6 +139,14 @@ func test_get(){
 
 }
 func main(){
-	andrew_portform()
+	//andrew_portform()
 	//test_get()
+	//test_get("http://127.0.0.1:8006/simple/server/get")
+	andrew_portform("http://127.0.0.1:9090/login_check")
+	andrew_portform("http://127.0.0.1:8006/simple/server/form_post")
+
+	//test_get("http://127.0.0.1/andrew/ssss")
+	//test_get("http://127.0.0.1:9090/ssss")
+	//test_get("http://127.0.0.1/baidu")
+	//andrew_get("http://127.0.0.1/go/hello")
 }

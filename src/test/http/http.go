@@ -9,6 +9,19 @@ import (
 	"strconv"
 )
 
+
+func myroot(w http.ResponseWriter,r *http.Request){
+	fmt.Println("hello method",r.Method)
+	r.ParseForm()
+	fmt.Println(r.Form)
+	fmt.Println(r.Header)
+	fmt.Println("path",r.URL.Path)
+	fmt.Println("scheme",r.URL.Scheme)
+	fmt.Println(r.Form["url_long"])
+	w.Header().Set("Andrew", "eric")
+	fmt.Fprint(w,"hello astaie:",r.URL.Path)
+}
+
 func hello(w http.ResponseWriter,r *http.Request){
 	fmt.Println("hello method",r.Method)
 	r.ParseForm()
@@ -21,6 +34,7 @@ func hello(w http.ResponseWriter,r *http.Request){
 		fmt.Println("val:",strings.Join(v,""))
 
 	}
+
 	fmt.Fprint(w,"hello astaie")
 }
 
@@ -94,12 +108,13 @@ func info_check(w http.ResponseWriter,r *http.Request){
 
 
 func main()  {
+	http.HandleFunc("/",myroot)
 	http.HandleFunc("/hello",hello)
 	http.HandleFunc("/login",login)
 	http.HandleFunc("/login_check",login_check)
 	http.HandleFunc("/info",info)
 	http.HandleFunc("/info_check",info_check)
-	err:=http.ListenAndServe(":9091",nil)
+	err:=http.ListenAndServe(":9090",nil)
 	if err!=nil {
 		log.Fatal("ListenAndServe: ",err)
 	}
