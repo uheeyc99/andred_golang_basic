@@ -141,9 +141,10 @@ func test_get(url string){
 func main(){
 	//andrew_portform()
 	//test_get()
-	//test_get("http://127.0.0.1:8006/simple/server/get")
-	andrew_portform("http://127.0.0.1:9090/login_check")
-	andrew_portform("http://127.0.0.1:8006/simple/server/form_post")
+	//test_get("http://127.0.0.1:9090/test")
+	//test_get("http://127.0.0.1:9090/index")
+	//andrew_portform("http://127.0.0.1:9090/login_check")
+	andrew_portform("http://127.0.0.1:9090/postform")
 
 	//test_get("http://127.0.0.1/andrew/ssss")
 	//test_get("http://127.0.0.1:9090/ssss")
