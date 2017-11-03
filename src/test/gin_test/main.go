@@ -12,7 +12,8 @@ import (
 /*
 
 http://blog.csdn.net/moxiaomomo/article/details/51153779
-
+https://studygolang.com/articles/2488
+http://blog.csdn.net/lijunwyf/article/details/50238005
  */
 
 
@@ -30,32 +31,46 @@ func test(){
 		c.String(http.StatusOK,"pong")
 	})
 
-	router.GET("/upload",Middleware,TestHandler)
-	router.POST("/upload", PostFileHandler)
-	router.POST("/uploads", PostFilesHandler)
 
-	router.GET("/get",Middleware,GetHandler)
-	router.POST("/post", PostHandler)
-	router.POST("/postform", PostFormHandler)
-
-	router.PUT("/put/:id", PutHandler)
-	router.DELETE("/delete/:id/:video", DeleteHandler)
-
+	v0:=router.Group("/v0")
 	v1:=router.Group("/v1")
 	v2:=router.Group("/v2")
 
+	{
+
+
+		v0.GET("/get",Middleware,GetHandler)
+		v0.POST("/post", PostHandler)
+		v0.POST("/postform", PostFormHandler)
+
+		v0.PUT("/put/:id", PutHandler)
+		v0.DELETE("/delete/:id/:video", DeleteHandler)
+
+		v0.GET("/upload",Middleware,TestHandler)
+		v0.POST("/upload", PostFileHandler)
+		v0.POST("/uploads", PostFilesHandler)
+	}
+
+
 
 	v1.Use(Middleware)
-	v1.GET("/hello", func(c *gin.Context) {
-		c.String(http.StatusOK,"hello,I am v1")
-	})
-	v2.GET("/hello", Middleware,func(c *gin.Context) {
-		c.String(http.StatusOK,"hello,I am v2")
-		//c.Redirect(http.StatusMovedPermanently, "http://www.baidu.com/")
-	})
+	{
+		v1.GET("/login",LoginHTMLHandler)
+		v1.POST("/login",LoginPostHandler)
+		v1.GET("/hello", func(c *gin.Context) {
+			c.String(http.StatusOK,"hello,I am v1")
+		})
+	}
 
-	router.GET("/login",LoginHTMLHandler)
-	router.POST("/login",LoginPostHandler)
+	{
+		v2.GET("/hello", Middleware,func(c *gin.Context) {
+			c.String(http.StatusOK,"hello,I am v2")
+			//c.Redirect(http.StatusMovedPermanently, "http://www.baidu.com/")
+		})
+	}
+
+
+
 
 	router.Run(":9090")
 
